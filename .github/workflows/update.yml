@@ -29,6 +29,23 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          
+          echo "=== Git Status ==="
+          git status
+          
+          echo "=== File exists? ==="
+          ls -la dtek_schedule.json || echo "FILE NOT FOUND"
+          
+          echo "=== Adding file ==="
           git add dtek_schedule.json
-          git diff --quiet --staged || git commit -m "Update schedule $(date +'%Y-%m-%d %H:%M')"
-          git push
+          
+          echo "=== Staged changes ==="
+          git diff --staged --stat
+          
+          if git diff --quiet --staged; then
+            echo "No changes to commit"
+          else
+            echo "Committing changes..."
+            git commit -m "Update schedule $(date +'%Y-%m-%d %H:%M')"
+            git push
+          fi
