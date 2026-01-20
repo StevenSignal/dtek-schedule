@@ -2,8 +2,8 @@ name: Update DTEK Schedule
 
 on:
   schedule:
-    # Запуск каждый день в 02:00 UTC
-    - cron: '0 2 * * *'
+    # Запуск каждый день в 22:00 UTC (00:00 по Днепру зимой)
+    - cron: '0 22 * * *'
   workflow_dispatch:  # Ручной запуск для теста
 
 jobs:
