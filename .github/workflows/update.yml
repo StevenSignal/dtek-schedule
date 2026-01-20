@@ -1,0 +1,34 @@
+name: Update DTEK Schedule
+
+on:
+  schedule:
+    # Запуск каждый день в 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # Ручной запуск для теста
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Run parser
+        run: python dtek_fact_parser.py
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add dtek_schedule.json
+          git diff --quiet --staged || git commit -m "Update schedule $(date +'%Y-%m-%d %H:%M')"
+          git push
